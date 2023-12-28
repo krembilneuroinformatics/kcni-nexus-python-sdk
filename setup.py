@@ -25,7 +25,8 @@ setup(
         "requests",
         "sseclient==0.0.22",
         "rdflib",
-        "SPARQLWrapper"
+        "SPARQLWrapper",
+        "pandas"
     ],
     extras_require={
         "test": ["pytest", "pytest-cov"],
