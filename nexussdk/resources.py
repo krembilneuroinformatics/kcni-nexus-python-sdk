@@ -6,6 +6,7 @@ Resources belong to projects and their access rights are defined at the project 
 
 from urllib.parse import quote_plus as url_encode
 from typing import Optional
+import builtins
 
 from nexussdk.utils.http import Http
 
@@ -132,6 +133,62 @@ class Resources:
             resource_id = url_encode(resource_id)
             path = path + "/" + resource_id
             return self._http.put(path, data, use_base=True)
+
+
+    def upsert(self, org_label, project_label, data, resource_id=None, schema_id=None):
+        """
+            Create a resource if it doesn't exist otherwise update it. 
+                        
+            :param org_label: The label of the organization that the resource belongs to
+            :param project_label: The label of the project that the resource belongs to
+            :param schema_id: OPTIONAL The schema to constrain the data. Can be None for non constrained data (default: "_")
+            :param data: dictionary containing the data to store in this new resource
+            :param resource_id: OPTIONAL The ID of the resource.  It must be in param data if not passed in
+            :return: A payload containing only the Nexus metadata for this updated resource.
+
+            If the data does not have a "@context" value, a default one is automatically added.
+        """
+
+        # check that resource id is present
+        if not resource_id:
+            resource_id = data['@id']
+
+            
+        # first we need to try to fetch the resource to check if it already exists
+        resource_list = self.list(
+            org_label, 
+            project_label,
+            resource_id = resource_id
+        )
+
+        if resource_list['_total'] == 1:
+            # need to update the file
+            existing_file_self = resource_list['_results'][0]['_self']
+            existing_file_revision = resource_list['_results'][0]['_rev']
+        else:
+            existing_file_self = None
+            existing_file_revision = None
+
+
+        if existing_file_self:
+            # perform an update
+            payload = self.update(
+                resource = data,
+                rev=existing_file_revision,
+                resource_self=existing_file_self
+            )
+        else:
+            # need to insert the file
+            payload = self.create(
+                org_label,
+                project_label,
+                data=data,
+                schema_id=schema_id,
+                resource_id=resource_id
+            )
+        
+        return payload
+
 
     def list(self, org_label, project_label, pagination_from=0, pagination_size=20,
              deprecated=None, type=None, rev=None, schema=None, created_by=None, updated_by=None, resource_id=None):

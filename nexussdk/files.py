@@ -10,6 +10,7 @@ from urllib.parse import quote_plus as url_encode
 import puremagic
 
 from nexussdk.utils.http import Http
+from nexussdk.utils.tools import calculate_file_content_digest
 
 
 class Files:
@@ -402,3 +403,67 @@ class Files:
             return guessed_content_type
         else:
             return content_type
+
+
+    def upsert(self, org_label: str, project_label: str, filepath: str, file_id: str, storage_id: Optional[str] = None,
+               filename: Optional[str] = None,
+               content_type: Optional[str] = None) -> Dict:
+        """
+            This function will create a file resource if it doesn't exist;  if it does exist it will update.
+
+            The function will also calculate the digest of the file prior to updating.  If the digest has not
+            changed, then it will skip the update so that we don't create unnessary revisions.
+            
+            :param org_label: The label of the organization that the file belongs to
+            :param project_label: The label of the project that the file belongs to
+            :param filepath: path of the file to upload
+            :param storage_id: OPTIONAL The id of the storage backend where the file will be stored.
+                               If not provided, the project's default storage is used.
+            :param file_id: Will use this id to identify the file if provided.
+                            If not provided, an ID will be generated.
+            :param filename: OPTIONAL Overrides the automatically detected filename
+            :param content_type: OPTIONAL Override the automatically detected content type
+            :return: A payload containing only the Nexus metadata for this updated file.
+        """
+
+        # perform a list operation to check if the file exists
+        # check if the file exists
+        file_list = self.list(
+            org_label, 
+            project_label, 
+            file_id = file_id
+        )
+
+    
+        if file_list['_total'] == 1:
+            # need to update the file
+            existing_digest = file_list['_results'][0]['_digest']['_value']
+            existing_file_revision = file_list['_results'][0]['_rev']
+        else:
+            existing_digest = None
+            existing_file_revision = None
+
+
+        new_digest = calculate_file_content_digest(filepath)
+    
+        if existing_digest:
+            # we may need to do an update
+            if existing_digest != new_digest:
+                return self.update(
+                    org_label,
+                    project_label,
+                    filepath = filepath,
+                    file_id = file_id,
+                    rev = existing_file_revision
+                )
+            else:
+                return file_list['_results'][0]
+            
+        else:
+            # need to insert the file
+            return self.create(
+                org_label,
+                project_label,
+                file_id = file_id,
+                filepath = filepath
+            )

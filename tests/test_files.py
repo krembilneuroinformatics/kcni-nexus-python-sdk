@@ -41,3 +41,16 @@ class TestResources(unittest.TestCase):
         payload = self.nexus.files.list(self.org, self.prj)
         pretty_print(payload)
         self.assertGreater(len(payload["_results"]), 0)
+
+    def test_upsert(self, id=random_string()):
+        payload = self.nexus.files.upsert(self.org, self.prj, "tests/file_upsert_test.jpg", file_id=id)
+        # insert file
+        self.assertEqual(payload['_rev'],1)
+
+        payload = self.nexus.files.upsert(self.org, self.prj, "tests/file_upsert_test2.jpg", file_id=id)
+        # should increment revision
+        self.assertEqual(payload['_rev'],2)
+
+        payload = self.nexus.files.upsert(self.org, self.prj, "tests/file_upsert_test2.jpg", file_id=id)
+        # no update because file hasn't changed
+        self.assertEqual(payload['_rev'],2)
