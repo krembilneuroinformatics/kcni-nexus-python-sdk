@@ -12,18 +12,18 @@ setup(
     name="nexus-sdk",
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
-    description="Python SDK for Blue Brain Nexus v1.",
+    description="CAMH KCNI version of Python SDK for Blue Brain Nexus.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="nexus sdk",
-    url="https://github.com/BlueBrain/nexus-python-sdk",
+    url="https://gitlab.camh.ca/kcni-ops-data-engineering-packages/nexus-python-sdk",
     license="Apache License, Version 2.0",
     packages=find_packages(),
     python_requires=">=3.5",
     install_requires=[
         "puremagic",
         "requests",
-        "sseclient"
+        "sseclient==0.0.22"
     ],
     extras_require={
         "test": ["pytest", "pytest-cov"],
