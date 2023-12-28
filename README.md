@@ -2,19 +2,19 @@
 
 # Nexus Python SDK
 
-Python SDK for [Blue Brain Nexus](https://github.com/BlueBrain/nexus) v1.
+KCNI-maintained version of the Python SDK for Blue Brain [Blue Brain Nexus](https://github.com/BlueBrain/nexus).
 
-[Status](#status) |
+[Original Repository](#original-repository) |
 [Getting Started](#getting-started) |
 [Upgrade](#upgrade) |
-[Releases](#releases) |
 [Contributing](#contributing)
 
 ---
 
-## Status
+## Original Repository
 
-Beta.
+Original Python SDK can be found here: [Nexus Python SDK](https://github.com/BlueBrain/nexus-python-sdk).
+Documentation for original version: https://bluebrain.github.io/nexus-python-sdk/.
 
 ## Getting Started
 
@@ -23,7 +23,7 @@ Beta.
 ````python
 import nexussdk as nexus
 
-nexus.config.set_environment(DEPLOYMENT)
+nexus.client.NexusClient(DEPLOYMENT, TOKEN)
 nexus.config.set_token(TOKEN)
 
 nexus.permissions.fetch()
@@ -34,10 +34,6 @@ More examples in the folder [notebooks](./notebooks) and [tests](./tests).
 Documentation: https://bluebrain.github.io/nexus-python-sdk/.
 
 ### Installation
-
-```bash
-pip install nexus-sdk
-```
 
 **Development version**
 
@@ -55,17 +51,13 @@ pip install --editable nexus-python-sdk
 **Requirements**
 
 - [requests](http://docs.python-requests.org)
+- [sseclient==0.0.22](https://pypi.org/project/sseclient/0.0.22/)
 
 ## Upgrade
 
 ```bash
 pip install --upgrade nexus-sdk
 ```
-
-## Releases
-
-Versions and their notable changes are listed in the [releases section](
-https://github.com/BlueBrain/nexus-python-sdk/releases/).
 
 ## Contributing
 
@@ -137,10 +129,3 @@ twine upload dist/*
 ```bash
 rm -R build dist *.egg-info
 ```
-
-## Funding & Acknowledgment
-
-This study was supported by funding to the Blue Brain Project, a research center of the École polytechnique fédérale de Lausanne (EPFL), from the Swiss government’s ETH Board of the Swiss Federal Institutes of Technology.
-
-Copyright © 2015-2022 Blue Brain Project/EPFL
-
