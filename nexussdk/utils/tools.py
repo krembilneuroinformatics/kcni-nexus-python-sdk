@@ -1,5 +1,6 @@
 import copy
 import json
+import hashlib
 
 from typing import Optional
 
@@ -60,3 +61,22 @@ def listing_params(pagination_from: Optional[int], pagination_size: Optional[int
         "updatedBy": updated_by,
         "rev": rev,
     }
+
+def calculate_file_content_digest(full_file_path):
+
+    """Generates the file digest value.  The intended usage
+    of this function was to compare the generated file digest
+    to the file digest auto-calculated when inserting a file
+    into Nexus.  This comparison was done so that we don't 
+    unnessarily update a file when no change has taken place.
+
+    :param full_file_path: Full file path of where the file is
+        locaed locally.
+    :return: File Digest value (sha256).
+     """
+    
+    with open(full_file_path,"rb") as f:
+        bytes = f.read() # read entire file as bytes
+        readable_hash = hashlib.sha256(bytes).hexdigest()
+
+    return readable_hash
