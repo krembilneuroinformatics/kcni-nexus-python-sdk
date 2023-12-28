@@ -23,7 +23,9 @@ setup(
     install_requires=[
         "puremagic",
         "requests",
-        "sseclient==0.0.22"
+        "sseclient==0.0.22",
+        "rdflib",
+        "SPARQLWrapper"
     ],
     extras_require={
         "test": ["pytest", "pytest-cov"],
