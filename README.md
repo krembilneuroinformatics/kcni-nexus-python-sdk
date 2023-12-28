@@ -36,14 +36,14 @@ Documentation: https://bluebrain.github.io/nexus-python-sdk/.
 **Development version**
 
 ```bash
-pip install git+https://github.com/BlueBrain/nexus-python-sdk
+pip install git+https://github.com/krembilneuroinformatics/kcni-nexus-python-sdk
 ```
 
 **Development mode**
 
 ```bash
-git clone https://github.com/bluebrain/nexus-python-sdk
-pip install --editable nexus-python-sdk
+git clone https://github.com/krembilneuroinformatics/kcni-nexus-python-sdk
+pip install --editable kcni-nexus-python-sdk
 ```
 
 **Requirements**
