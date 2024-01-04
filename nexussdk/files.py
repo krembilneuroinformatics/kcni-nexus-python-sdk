@@ -397,7 +397,9 @@ class Files:
         if content_type is None:
             try:
                 guessed_content_type = puremagic.from_file(filepath, True)
-            except puremagic.main.PureError as e:
+            #TODO - need to catch the error better.  Was receiving errors when file size was 0.
+            #except puremagic.main.PureError as e:
+            except Exception as e:
                 print(f"{e}, using the default content type instead: {self._default_content_type}")
                 guessed_content_type = self._default_content_type
             return guessed_content_type
