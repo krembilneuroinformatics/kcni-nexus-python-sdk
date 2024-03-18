@@ -54,7 +54,7 @@ pip install --editable kcni-nexus-python-sdk
 ## Upgrade
 
 ```bash
-pip install --upgrade nexus-sdk
+pip install --upgrade kcni-nexus-python-sdk
 ```
 
 ## Contributing
