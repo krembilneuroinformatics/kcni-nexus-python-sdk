@@ -456,7 +456,8 @@ class Files:
                     project_label,
                     filepath = filepath,
                     file_id = file_id,
-                    rev = existing_file_revision
+                    rev = existing_file_revision,
+                    filename = filename
                 )
             else:
                 return file_list['_results'][0]
@@ -467,5 +468,6 @@ class Files:
                 org_label,
                 project_label,
                 file_id = file_id,
-                filepath = filepath
+                filepath = filepath,
+                filename = filename
             )
